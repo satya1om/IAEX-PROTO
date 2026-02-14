@@ -1,0 +1,22 @@
+<div class="min-h-screen flex flex-col">
+  @if(!isHomePage) {
+    <app-header></app-header>
+  }
+  <main class="flex-grow">
+    <router-outlet></router-outlet>
+  </main>
+  @if(!isHomePage) {
+    <!-- Global CTA -->
+    <div class="sticky bottom-0 z-40 bg-black text-white p-4">
+      <div class="container mx-auto px-6 flex flex-col sm:flex-row items-center justify-center text-center sm:justify-between">
+        <p class="font-display text-lg font-medium mb-3 sm:mb-0">
+          Ready to Engage Our Network?
+        </p>
+        <a routerLink="/contact" class="inline-block bg-white text-black font-bold py-2.5 px-6 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-200 transition-colors">
+          Initiate a Strategic Dialogue
+        </a>
+      </div>
+    </div>
+    <app-footer></app-footer>
+  }
+</div>

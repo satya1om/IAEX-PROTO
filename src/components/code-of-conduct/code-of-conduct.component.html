@@ -1,0 +1,64 @@
+<div class="bg-gray-50/50 min-h-full">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Page Header -->
+      <header class="mb-12 text-center">
+        <h1 class="font-display text-5xl md:text-6xl font-bold text-black tracking-tight leading-tight mb-4">
+          Code of Conduct
+        </h1>
+        <p class="text-lg text-gray-500 font-light">
+          Our commitment to responsible, ethical, and sustainable manufacturing is non-negotiable. This Code outlines the minimum standards for all network partners.
+        </p>
+      </header>
+
+      <!-- Preamble Section -->
+      <div class="bg-white p-8 rounded-lg border border-gray-200/80 shadow-sm mb-10">
+        <h2 class="font-display text-2xl font-bold text-black mb-3">Preamble</h2>
+        <p class="text-gray-600 font-light leading-relaxed">
+          The IAEX Network is built on a foundation of trust, integrity, and a commitment to responsible and sustainable manufacturing. This Code of Conduct outlines the minimum standards required of all manufacturing partners. It is applicable to all scales of operation, from MSMEs to large-scale units. Compliance is a prerequisite for entry and continued participation in our network, reflecting our shared values and alignment with global standards like the Universal Declaration of Human Rights and the ILO Declaration.
+        </p>
+      </div>
+
+      <!-- Accordion Sections -->
+      <div class="space-y-4">
+        @for (section of sections; track section.title; let i = $index) {
+          <div class="border border-gray-200/80 rounded-lg bg-white overflow-hidden transition-all duration-300" 
+               [class.shadow-lg]="openSection() === i"
+               [class.shadow-sm]="openSection() !== i">
+            <button (click)="toggleSection(i)" class="w-full flex items-center justify-between text-left p-6 hover:bg-gray-50/70 focus:outline-none">
+              <span class="flex items-center">
+                <i class="{{ section.icon }} text-black w-6 text-center text-lg mr-4"></i>
+                <span class="font-display text-xl font-bold text-black">{{ section.title }}</span>
+              </span>
+              <span class="transform transition-transform duration-300" [class.rotate-180]="openSection() === i">
+                <i class="fa-solid fa-chevron-down text-gray-400"></i>
+              </span>
+            </button>
+            
+            @if (openSection() === i) {
+              <div class="px-6 pb-6 pt-2 border-t border-gray-100">
+                <div class="space-y-5">
+                  @for(point of section.points; track point.title) {
+                    <div>
+                      <h4 class="font-semibold text-black mb-1">{{ point.title }}</h4>
+                      <p class="text-gray-600 font-light leading-relaxed text-sm">{{ point.content }}</p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+
+      <!-- Footer CTA -->
+      <div class="mt-16 border-t border-gray-200 pt-10 text-center">
+        <a routerLink="/partners" class="text-sm font-medium text-gray-500 hover:text-black transition-colors group mb-6 inline-block">
+          <span class="transition-all duration-300 group-hover:-translate-x-1 inline-block">&larr;</span> Back to Partner With Us
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

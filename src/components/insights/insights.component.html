@@ -1,0 +1,70 @@
+<div class="bg-gray-50/50 min-h-full">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+    <!-- Section Title -->
+    <div class="mb-12 md:mb-16">
+      <h1 class="font-display text-5xl md:text-6xl font-bold text-black tracking-tight leading-none mb-6">
+        Industry Insights
+      </h1>
+      <p class="text-lg text-gray-500 font-light max-w-2xl">
+        Analysis and perspectives on the evolving landscape of apparel sourcing and manufacturing in India.
+      </p>
+    </div>
+    
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (article of paginatedArticles(); track article.slug) {
+        <a [routerLink]="['/insights', article.slug]" [queryParams]="{ page: currentPage() }" class="flex flex-col bg-white p-6 rounded-lg border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group">
+          <!-- Image Container -->
+          <div class="w-full h-40 mb-5 rounded-md overflow-hidden flex-shrink-0">
+             <img [src]="article.imageUrl" [alt]="article.title" class="w-full h-full object-cover">
+          </div>
+          
+          <!-- Text Content Container -->
+          <div class="flex flex-col flex-grow">
+            <div class="flex items-center text-xs text-gray-400 mb-3">
+              <span>{{ article.date }}</span>
+              <span class="mx-2">|</span>
+              <span class="font-semibold uppercase tracking-wider">{{ article.category }}</span>
+            </div>
+            <h2 class="font-display text-lg font-bold text-black mb-2 leading-snug group-hover:text-gray-700 transition-colors">
+              {{ article.title }}
+            </h2>
+            <p class="text-sm text-gray-600 font-light leading-relaxed">{{ article.excerpt }}</p>
+          </div>
+        </a>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <div class="mt-16 flex justify-center items-center space-x-2">
+        <!-- Previous Button -->
+        <button (click)="changePage(currentPage() - 1)" [disabled]="currentPage() === 1" 
+                class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+          Previous
+        </button>
+        
+        <!-- Page Numbers -->
+        @for(page of getPageNumbers(); track $index) {
+           @if (typeof page === 'number') {
+            <button (click)="changePage(page)" 
+                    [class.bg-black]="currentPage() === page"
+                    [class.text-white]="currentPage() === page"
+                    [class.bg-white]="currentPage() !== page"
+                    class="w-10 h-10 text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+              {{ page }}
+            </button>
+           } @else {
+             <span class="px-2 py-2 text-sm font-medium text-gray-400">...</span>
+           }
+        }
+        
+        <!-- Next Button -->
+        <button (click)="changePage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
+                class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed">
+          Next
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="bg-white min-h-full">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+    <div class="max-w-4xl mx-auto">
+
+      <!-- Page Header -->
+      <header class="mb-12 text-center">
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-black tracking-tight leading-tight mb-4">
+          Privacy Policy
+        </h1>
+        <div class="w-24 h-px bg-gray-200 mx-auto mt-8"></div>
+      </header>
+      
+      <!-- Main Content Area -->
+      <main>
+        <div class="space-y-12">
+          @for (section of policySections; track section.id) {
+            <section [id]="section.id" class="pb-8 border-b border-gray-200 last:border-b-0">
+              <h2 class="font-display text-xl font-bold text-black mb-4">{{ section.title }}</h2>
+              <!-- text-xs sets the base font size for prose which uses relative em units -->
+              <div class="text-xs">
+                 @if (section.id === 'contact-us') {
+                    <div class="prose max-w-none prose-p:font-light prose-p:leading-normal prose-strong:font-semibold">
+                      <p>For any questions or comments about this Privacy Policy, to exercise your rights, or for any grievances, please use our secure <a routerLink="/contact" class="text-black font-medium underline">Contact Page</a> or write to our Data Protection / Grievance Officer at:</p>
+                      <p><strong>Address:</strong><br>
+                      IAEX Network<br>
+                      Plot No. 26, First Floor, BLS, Block A-1,<br>
+                      Mohan Garden, New Delhi, 110059 | India</p>
+                    </div>
+                 } @else {
+                  <div class="prose max-w-none prose-p:font-light prose-p:leading-normal prose-h3:font-display prose-h3:font-bold prose-h3:text-black prose-ul:font-light prose-strong:font-semibold prose-a:text-black prose-a:font-medium prose-a:underline" [innerHTML]="section.content">
+                    <!-- The safe HTML content from the service will be rendered here -->
+                  </div>
+                 }
+              </div>
+            </section>
+          }
+        </div>
+      </main>
+    </div>
+  </div>
+</div>

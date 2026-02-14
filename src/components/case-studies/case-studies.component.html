@@ -1,0 +1,53 @@
+<div class="bg-gray-50/50 min-h-full">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+    <!-- Section Title -->
+    <div class="mb-12 md:mb-16">
+      <h1 class="font-display text-5xl md:text-6xl font-bold text-black tracking-tight leading-none mb-6">
+        Network-Driven Solutions
+      </h1>
+      <p class="text-lg text-gray-500 font-light max-w-2xl">
+        Real-world sourcing challenges solved through our intelligent, decentralized ecosystem.
+      </p>
+    </div>
+
+    <!-- Case Studies Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      @for (study of caseStudies; track study.client) {
+        <div class="bg-white p-8 rounded-lg border border-gray-200/75 shadow-sm flex flex-col">
+          <div class="flex-grow">
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">{{ study.category }}</p>
+            <h2 class="font-display text-xl font-bold text-black mb-4">{{ study.client }}</h2>
+            
+            <div class="space-y-4 text-gray-600 font-light text-sm leading-relaxed">
+              <div>
+                <strong class="font-semibold text-black">The Problem:</strong>
+                <p>{{ study.problem }}</p>
+              </div>
+              <div>
+                <strong class="font-semibold text-black">IAEX Solution:</strong>
+                <p>{{ study.solution }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Outcome -->
+          <div class="mt-6 pt-5 border-t border-gray-100">
+             <strong class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-2 block">Strategic Outcome</strong>
+             <p class="text-sm font-medium text-black leading-relaxed">{{ study.outcome }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-24 text-center">
+      <div class="w-24 h-px bg-gray-200 mx-auto mb-8"></div>
+      <h3 class="font-display text-3xl text-black font-semibold mb-4">Have a similar challenge?</h3>
+      <p class="text-gray-500 mb-6">Let's discuss how our network can deliver results for you.</p>
+      <a routerLink="/contact" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+        Contact Us
+      </a>
+    </div>
+
+  </div>
+</div>

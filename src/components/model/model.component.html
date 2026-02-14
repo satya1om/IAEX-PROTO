@@ -1,0 +1,132 @@
+<div class="bg-white min-h-full">
+  <div class="container mx-auto px-6 py-16 md:py-24">
+
+    <!-- SECTION 1: Our Network Model -->
+    <div class="mb-16">
+      <div class="mb-12">
+        <h1 class="font-display text-5xl md:text-6xl font-bold text-black tracking-tight leading-none mb-6">
+          The Intelligent Sourcing Ecosystem
+        </h1>
+        <div class="w-20 h-1.5 bg-black"></div>
+      </div>
+      <p class="text-lg md:text-xl text-gray-600 font-light leading-relaxed max-w-3xl mb-12">
+        We operate a decentralized, intelligent sourcing ecosystem, not a traditional agency. This model provides unparalleled agility, diversification, and direct alignment with your program's unique requirements.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        @for (point of networkModelPoints; track point.title) {
+          <div class="bg-gray-50/70 p-6 rounded-lg flex items-start" [class.border-l-4]="point.details" [class.border-black]="point.details">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white rounded-full mr-5 border border-gray-200 shadow-sm">
+                <i class="{{ point.icon }} text-black"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-black text-lg" [class.mb-1]="!point.details" [class.mb-2]="point.details">{{ point.title }}</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">{{ point.description }}</p>
+                @if (point.details) {
+                  <div class="mt-3 space-y-2 text-sm border-t border-gray-200 pt-3">
+                    @for(detail of point.details; track detail.title) {
+                      <p class="font-light text-gray-700"><strong class="font-medium text-black">{{ detail.title }}:</strong> {{ detail.text }}</p>
+                    }
+                  </div>
+                }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- CTA Section -->
+      <div class="mt-16 text-center bg-gray-50/70 p-8 rounded-lg border border-gray-200">
+        <h3 class="font-display text-2xl text-black font-semibold mb-3">Discover Your Competitive Edge</h3>
+        <p class="text-gray-600 font-light max-w-xl mx-auto mb-6">Let our intelligent ecosystem power your sourcing strategy for greater agility, resilience, and growth.</p>
+        <a routerLink="/contact" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+          Discover Your Competitive Edge
+        </a>
+      </div>
+
+    </div>
+
+    <div class="w-full h-px bg-gray-200 my-16 md:my-20"></div>
+
+    <!-- SECTION 2: The IAEX Assurance Framework -->
+    <div>
+      <div class="mb-12 text-center max-w-3xl mx-auto">
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-black tracking-tight leading-none mb-4">
+          The Assurance & Intelligence Framework
+        </h2>
+        <p class="text-base text-gray-500 font-light leading-relaxed">
+          Our proprietary framework is the strategic core of our operating model. It integrates robust governance and data intelligence into the sourcing lifecycle to build resilient, responsible, and future-ready supply chains.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        
+        <!-- Pillar 1: Dynamic Compliance -->
+        <div class="bg-gray-50/70 p-6 rounded-lg flex flex-col">
+            <div class="text-center">
+                <div class="flex justify-center mb-4"><i class="fa-solid fa-shield-halved text-black text-3xl"></i></div>
+                <h3 class="font-display text-xl font-bold text-black mb-2">Dynamic Compliance</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">We coordinate partner readiness for audits and ensure alignment with global and brand-specific standards.</p>
+            </div>
+            <div class="text-left border-t border-gray-200 pt-4 mt-4 space-y-4 flex-grow">
+                <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Key Focus Areas:</p>
+                <div class="flex items-start"><i class="fa-solid fa-file-signature text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Audit Readiness:</strong> IAEX matches programs with pre-vetted partners holding existing certifications (Sedex, WRAP, BSCI), drastically reducing your compliance onboarding time and audit fatigue.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-gavel text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Regulatory Intelligence:</strong> We provide proactive monitoring of evolving global regulations (REACH, CPSIA, ZDHC), protecting your market access and preventing costly delays due to non-compliance.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-hands-holding-child text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Ethical Standard Implementation:</strong> We translate your brand's Code of Conduct into actionable, factory-floor protocols, ensuring your ethical integrity is upheld from day one and minimizing reputational risk.</p></div>
+            </div>
+        </div>
+        
+        <!-- Pillar 2: Supply Chain Visibility -->
+        <div class="bg-gray-50/70 p-6 rounded-lg flex flex-col">
+            <div class="text-center">
+                <div class="flex justify-center mb-4"><i class="fa-solid fa-sitemap text-black text-3xl"></i></div>
+                <h3 class="font-display text-xl font-bold text-black mb-2">Supply Chain Visibility</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">We coordinate the mapping of the supply chain from raw material to finished product for transparent, informed decision-making.</p>
+            </div>
+            <div class="text-left border-t border-gray-200 pt-4 mt-4 space-y-4 flex-grow">
+                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Key Focus Areas:</p>
+                <div class="flex items-start"><i class="fa-solid fa-boxes-stacked text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Multi-Tier Mapping:</strong> IAEX coordinates documentation from Tier 1 (assembly) to Tier 2 (fabric) and beyond, providing a clear ecosystem map for strategic decisions and risk assessment.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-fingerprint text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Material Origin Traceability:</strong> We facilitate the collection of critical documentation to verify raw material origins, ensuring your products meet stringent import regulations like the UFLPA.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Disruption Foresight:</strong> By mapping the chain, we empower you to identify and mitigate single-point-of-failure risks, building resilience against geopolitical and logistical disruptions.</p></div>
+            </div>
+        </div>
+
+        <!-- Pillar 3: Sustainability Integration -->
+        <div class="bg-gray-50/70 p-6 rounded-lg flex flex-col">
+          <div class="text-center">
+            <div class="flex justify-center mb-4"><i class="fa-solid fa-seedling text-black text-3xl"></i></div>
+            <h3 class="font-display text-xl font-bold text-black mb-2">Sustainability Integration</h3>
+            <p class="text-sm text-gray-600 font-light leading-relaxed">We guide clients toward environmentally conscious sourcing that aligns with future market and consumer demands.</p>
+          </div>
+          <div class="text-left border-t border-gray-200 pt-4 mt-4 space-y-4 flex-grow">
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Key Focus Areas:</p>
+              <div class="flex items-start"><i class="fa-solid fa-leaf text-green-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Strategic Material Selection:</strong> IAEX guides you through the complex landscape of certified materials. We connect you with partners proficient in <strong>GOTS, OCS, GRS, and BCI</strong>, enabling you to build credible, sustainable product lines that meet global consumer expectations.</p></div>
+              <div class="flex items-start"><i class="fa-solid fa-droplet text-blue-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Eco-Process Transition:</strong> We identify and facilitate partnerships with manufacturers leading in sustainable production. This includes transitioning to <strong>low-impact dyeing, advanced water recycling systems, and renewable energy sources</strong>, tangibly reducing your product's carbon and water footprint.</p></div>
+              <div class="flex items-start"><i class="fa-solid fa-recycle text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Long-Term Impact Reduction:</strong> Beyond immediate production, IAEX helps you build a future-ready supply chain by identifying opportunities for <strong>circularity—using recycled inputs and designing for end-of-life recyclability</strong>—to enhance long-term brand value.</p></div>
+          </div>
+        </div>
+
+         <!-- Pillar 4: Data & Intelligence -->
+        <div class="bg-gray-50/70 p-6 rounded-lg flex flex-col">
+            <div class="text-center">
+                <div class="flex justify-center mb-4"><i class="fa-solid fa-chart-pie text-black text-3xl"></i></div>
+                <h3 class="font-display text-xl font-bold text-black mb-2">Data & Intelligence</h3>
+                <p class="text-sm text-gray-600 font-light leading-relaxed">We leverage network data to provide predictive insights and strategic sourcing recommendations that drive efficiency.</p>
+            </div>
+            <div class="text-left border-t border-gray-200 pt-4 mt-4 space-y-4 flex-grow">
+                 <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Key Focus Areas:</p>
+                <div class="flex items-start"><i class="fa-solid fa-tachometer-alt text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Performance Benchmarking:</strong> We provide anonymized data on partner KPIs (quality scores, delivery rates) so you select from the top-quartile performers for your specific program needs.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-arrow-trend-up text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Predictive Market Insights:</strong> We analyze network-wide data to offer curated intelligence on material costs and capacity trends, empowering you to make proactive purchasing decisions.</p></div>
+                <div class="flex items-start"><i class="fa-solid fa-microchip text-gray-600 text-xs mt-1.5 mr-3 w-4 text-center"></i><p class="text-sm text-gray-700 font-light"><strong>Technical Capability Mapping:</strong> Our proprietary database of partner machinery and specializations delivers a rapid, precise technical match for complex products, shortening the discovery phase.</p></div>
+            </div>
+        </div>
+
+      </div>
+
+      <div class="mt-16 bg-white border border-gray-200 p-8 rounded-lg max-w-4xl mx-auto">
+        <h4 class="font-display text-lg font-bold text-black text-center mb-4">Our Role as Strategic Coordinators</h4>
+        <p class="text-sm text-gray-600 font-light text-center leading-relaxed">
+          It is critical to understand our position: IAEX acts as a strategic coordinator and facilitator. The ultimate responsibility for manufacturing, quality control, and direct compliance execution remains with the independent manufacturing partners. Our value lies in intelligent mapping, transparent coordination, and risk mitigation through network diversification.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

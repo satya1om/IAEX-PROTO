@@ -1,0 +1,48 @@
+<div class="relative w-full h-screen overflow-hidden flex items-center justify-center">
+  <canvas #networkCanvas class="absolute top-0 left-0 w-full h-full z-0 opacity-50"></canvas>
+  <div class="relative z-10 flex flex-col h-full w-full justify-between p-8 md:p-16 container mx-auto">
+    <!-- Header Section -->
+    <header class="flex justify-between items-center">
+       <a routerLink="/" class="flex items-center space-x-3">
+        <div class="w-3 h-3 bg-black"></div>
+        <span class="font-display text-sm font-bold tracking-[0.2em] uppercase text-gray-900">IAEX Network</span>
+      </a>
+      <a routerLink="/about" class="font-display text-sm font-medium text-gray-700 hover:text-black transition-colors group">
+        Enter Site <span class="group-hover:ml-2 transition-all duration-300">&rarr;</span>
+      </a>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-grow flex items-center">
+      <div class="max-w-3xl">
+        <div class="w-16 h-1 bg-black mb-8"></div>
+        <h1 class="font-display text-6xl md:text-8xl font-bold text-black tracking-tighter leading-tight mb-6">
+          IAEX<br>NETWORK
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 font-light tracking-wide max-w-lg mb-8">
+          Network-Driven Buying & Sourcing Partner | India
+        </p>
+        <div class="flex space-x-6">
+            <a routerLink="/case-studies" class="text-sm font-medium text-black hover:underline">Explore Our Work</a>
+            <a routerLink="/insights" class="text-sm font-medium text-black hover:underline">Read Our Insights</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="w-full">
+      <div class="w-full h-px bg-gray-200 mb-6"></div>
+      <div class="flex flex-wrap justify-center md:justify-between items-center text-xs uppercase tracking-[0.2em] text-gray-500 font-medium gap-2 md:gap-4">
+        <p>India Focused</p>
+        <span class="hidden md:inline text-gray-300">|</span>
+        <p>Knit & Woven</p>
+        <span class="hidden md:inline text-gray-300">|</span>
+        <p>Domestic & Export</p>
+        <span class="hidden md:inline text-gray-300">|</span>
+        <p>Network-Driven</p>
+        <span class="hidden md:inline text-gray-300">|</span>
+        <p>Future-Ready</p>
+      </div>
+    </footer>
+  </div>
+</div>

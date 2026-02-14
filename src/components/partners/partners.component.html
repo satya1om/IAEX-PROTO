@@ -1,0 +1,197 @@
+<div class="bg-white min-h-full">
+  <!-- Hero Section -->
+  <div class="container mx-auto px-6 pt-16 md:pt-24 pb-12 md:pb-16 text-center">
+    <h1 class="font-display text-5xl md:text-7xl font-bold text-black tracking-tighter leading-tight mb-6">
+      The Architecture of Partnership.
+    </h1>
+    <p class="text-lg md:text-xl text-gray-600 font-light leading-relaxed max-w-4xl mx-auto">
+      We don't just find suppliers; we engineer resilient supply chains. IAEX invites leading brands, best-in-class manufacturers, and strategic sourcing partners to co-create the future of global apparel trade.
+    </p>
+  </div>
+
+  <!-- Gateway Section -->
+  <div class="container mx-auto px-6 pb-16 md:pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <!-- Card 1: For Brands -->
+      <a routerLink="/contact" [queryParams]="{ pathway: 'brands' }" class="group text-left bg-black text-white p-8 rounded-lg border border-transparent hover:bg-gray-800 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Engage The Network</p>
+            <h2 class="font-display text-2xl font-bold text-white">For Brands & Retailers</h2>
+            <p class="text-sm text-gray-300 font-light mt-1">Leverage our ecosystem for intelligent sourcing.</p>
+          </div>
+          <i class="fa-solid fa-tags text-3xl text-gray-500 group-hover:text-white transition-colors"></i>
+        </div>
+      </a>
+      <!-- Card 2: For Manufacturers -->
+      <a routerLink="/contact" [queryParams]="{ pathway: 'partners' }" class="group text-left bg-gray-50/70 p-8 rounded-lg border border-gray-200 hover:border-black hover:bg-white transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Join The Core</p>
+            <h2 class="font-display text-2xl font-bold text-black">For Manufacturers</h2>
+            <p class="text-sm text-gray-600 font-light mt-1">Integrate your capabilities into our ecosystem.</p>
+          </div>
+          <i class="fa-solid fa-industry text-3xl text-gray-300 group-hover:text-black transition-colors"></i>
+        </div>
+      </a>
+      <!-- Card 3: For Sourcing Alliances -->
+      <a routerLink="/contact" [queryParams]="{ pathway: 'partners' }" class="group text-left bg-gray-50/70 p-8 rounded-lg border border-gray-200 hover:border-black hover:bg-white transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Join The Edge</p>
+            <h2 class="font-display text-2xl font-bold text-black">For Sourcing Alliances</h2>
+            <p class="text-sm text-gray-600 font-light mt-1">Extend your global reach with us.</p>
+          </div>
+          <i class="fa-solid fa-globe text-3xl text-gray-300 group-hover:text-black transition-colors"></i>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Section Separator -->
+  <div class="w-full h-px bg-gray-100"></div>
+
+  <!-- Brands & Retailers Section -->
+  <div id="brands-retailers" class="bg-gray-50/50 py-16 md:py-24 scroll-mt-20">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-4xl mx-auto mb-12 md:mb-16">
+        <h2 class="font-display text-4xl md:text-5xl font-bold text-black tracking-tight leading-none mb-4">
+          For Brands & Retailers
+        </h2>
+        <p class="text-lg text-gray-500 font-light leading-relaxed">
+          Integrate with an intelligent, decentralized sourcing ecosystem designed to deliver resilience, speed, and a decisive competitive advantage.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        @for(benefit of brandBenefits; track benefit.title) {
+          <div class="bg-white p-8 rounded-lg flex items-start border border-gray-200/80 shadow-sm">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full mr-5">
+              <i class="{{benefit.icon}} text-black"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-black text-lg mb-1">{{ benefit.title }}</h3>
+              <p class="text-sm text-gray-600 font-light leading-relaxed">{{ benefit.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="mt-16 text-center">
+        <h3 class="font-display text-2xl text-black font-semibold mb-3">Upgrade Your Sourcing Architecture.</h3>
+        <p class="text-gray-600 font-light max-w-xl mx-auto mb-6">Move beyond transactional procurement. Partner with a system designed for the future of commerce.</p>
+        <a routerLink="/contact" [queryParams]="{ pathway: 'brands' }" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+          Initiate a Strategic Dialogue
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manufacturing Partners Section -->
+  <div id="manufacturing-partners" class="bg-white py-16 md:py-24 scroll-mt-20 border-t border-gray-100">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <!-- Left side: Content -->
+        <div class="lg:col-span-7">
+          <h2 class="font-display text-4xl md:text-5xl font-bold text-black tracking-tight leading-none mb-4">
+            The Manufacturing Core
+          </h2>
+          <p class="text-lg text-gray-500 font-light leading-relaxed max-w-2xl mb-12">
+            Our network is a curated ecosystem of specialists committed to precision, compliance, and innovation. We offer access to strategic programs that value capability over cost.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+            @for (benefit of manufacturingBenefits; track benefit.title) {
+              <div class="flex items-start">
+                <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full mr-5">
+                  <i class="{{benefit.icon}} text-black"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-black text-lg mb-1">{{ benefit.title }}</h3>
+                  <p class="text-sm text-gray-600 font-light leading-relaxed">{{ benefit.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <!-- Right side: CTA / Profile Card -->
+        <div class="lg:col-span-5 lg:sticky top-28">
+          <div class="bg-gray-50/70 p-8 rounded-lg border border-gray-200">
+            <h3 class="font-display text-2xl text-black font-semibold mb-4">
+              Our Ideal Partner Profile
+            </h3>
+            <p class="text-gray-600 font-light text-sm mb-6">We seek long-term alignment with manufacturers who demonstrate excellence in four key areas:</p>
+            <div class="space-y-4 mb-8">
+              @for(item of idealPartnerProfile; track item.title) {
+                <div class="flex items-start">
+                  <i class="fa-solid fa-check text-black text-xs mt-1.5 mr-3"></i>
+                  <div>
+                    <h4 class="font-semibold text-black text-sm">{{ item.title }}</h4>
+                    <p class="text-xs text-gray-500 font-light">{{ item.description }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="mb-6 p-4 bg-white/50 rounded-md border border-gray-200">
+              <p class="text-sm text-gray-700 font-light">
+                Adherence to our <a routerLink="/code-of-conduct" class="font-medium text-black underline hover:text-gray-700">Minimum Code of Conduct</a> is a non-negotiable prerequisite.
+              </p>
+            </div>
+            <div class="border-t border-gray-200 pt-6">
+              <h4 class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">
+                Initiate a Dialogue
+              </h4>
+              <p class="text-sm text-gray-600 mb-5">
+                If your organization aligns with this profile, send your capability deck to our network management team.
+              </p>
+              <a routerLink="/contact" [queryParams]="{ pathway: 'partners' }" class="inline-block w-full text-center bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+                Get In Touch
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sourcing Alliance Section -->
+  <div id="sourcing-alliance" class="bg-black text-white py-16 md:py-24 scroll-mt-20">
+    <div class="container mx-auto px-6">
+      <div class="text-center max-w-4xl mx-auto mb-12 md:mb-16">
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">The Strategic Edge: Our Global Alliance</h2>
+        <p class="text-gray-300 font-light max-w-3xl mx-auto text-lg leading-relaxed">
+            Global trade requires distributed intelligence. We invite established sourcing firms, agents, and consultants to form a powerful, collaborative alliance based on reciprocal value.
+        </p>
+      </div>
+
+      <!-- How it Works -->
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 md:mb-16">
+        @for(item of allianceModel; track item.title) {
+          <div class="bg-white/5 p-8 rounded-lg border border-white/10">
+            <h3 class="font-display text-xl font-bold text-white mb-2">{{ item.title }}</h3>
+            <p class="text-sm text-gray-400 font-light leading-relaxed">{{ item.description }}</p>
+          </div>
+        }
+      </div>
+
+      <!-- Benefits Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-5xl mx-auto mb-12 md:mb-16">
+        @for (benefit of sourcingPartnerBenefits; track benefit.title) {
+          <div class="flex items-start">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/10 rounded-full mr-5">
+              <i class="{{benefit.icon}} text-white"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-white text-lg mb-1">{{ benefit.title }}</h3>
+              <p class="text-sm text-gray-400 font-light leading-relaxed">{{ benefit.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="text-center">
+        <h4 class="text-gray-400 font-light mb-4">Forge a strategic connection that expands your capabilities.</h4>
+        <a routerLink="/contact" [queryParams]="{ pathway: 'partners' }" class="inline-block bg-white text-black font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-200 transition-colors">
+            Propose a Partnership
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

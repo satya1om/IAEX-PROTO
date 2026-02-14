@@ -1,0 +1,52 @@
+<div class="bg-white min-h-full">
+  @if (article()) {
+    <div class="container mx-auto px-6 py-16 md:py-24">
+      <div class="max-w-3xl mx-auto">
+
+        <!-- Article Header -->
+        <header class="mb-10">
+          <a [routerLink]="['/insights']" [queryParams]="insightsPage() ? { page: insightsPage() } : null" class="text-sm font-medium text-gray-500 hover:text-black transition-colors group mb-6 inline-block">
+            <span class="transition-all duration-300 group-hover:-translate-x-1 inline-block">&larr;</span> Back to Insights
+          </a>
+          <div class="flex items-center text-xs text-gray-400 mb-3">
+            <span>{{ article()!.date }}</span>
+            <span class="mx-2">|</span>
+            <span class="font-semibold uppercase tracking-wider">{{ article()!.category }}</span>
+          </div>
+          <h1 class="font-display text-4xl md:text-5xl font-bold text-black tracking-tight leading-tight mb-5">
+            {{ article()!.title }}
+          </h1>
+          <p class="text-xs text-gray-500 font-medium">By {{article()!.author}}</p>
+        </header>
+
+        <!-- Feature Image -->
+        <div class="aspect-[3/2] mb-10 rounded-lg overflow-hidden border border-gray-100 shadow-md">
+          <img [ngSrc]="article()!.imageUrl" [alt]="article()!.title" width="900" height="600" priority="true" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Article Content -->
+        <div class="prose prose-lg max-w-none prose-p:font-light prose-p:leading-relaxed prose-h2:font-display prose-h2:font-bold prose-h2:text-black prose-h3:font-display prose-h3:font-bold prose-h3:text-black" [innerHTML]="article()!.content">
+          <!-- The safe HTML content from the service will be rendered here -->
+        </div>
+
+        <!-- Footer CTA -->
+        <div class="mt-16 border-t border-gray-200 pt-10 text-center">
+          <h3 class="font-display text-2xl text-black font-semibold mb-3">Ready to Apply These Insights?</h3>
+          <p class="text-gray-600 font-light mb-6">Let's discuss how our network intelligence can address your specific sourcing challenges.</p>
+          <a routerLink="/contact" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Fallback for article not found -->
+    <div class="container mx-auto px-6 text-center py-40">
+      <h2 class="font-display text-3xl font-bold text-black mb-4">Article Not Found</h2>
+      <p class="text-gray-500 mb-6">The insight you're looking for doesn't exist or may have been moved.</p>
+      <a routerLink="/insights" class="inline-block bg-black text-white font-bold py-3 px-8 rounded-lg text-sm uppercase tracking-wider hover:bg-gray-800 transition-colors">
+        Return to Insights
+      </a>
+    </div>
+  }
+</div>
