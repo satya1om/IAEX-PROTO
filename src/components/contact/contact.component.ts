@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { GoogleGenAI } from '@google/genai';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -12,10 +11,8 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactComponent implements OnInit, OnDestroy {
-  // FIX: FormBuilder injection moved to constructor to resolve a potential injection context issue.
   private readonly fb: FormBuilder;
   private readonly route = inject(ActivatedRoute);
-  private ai!: GoogleGenAI;
   private routeSub!: Subscription;
 
   activePathway = signal<'brands' | 'partners' | 'direct' | null>(null);
@@ -23,13 +20,12 @@ export class ContactComponent implements OnInit, OnDestroy {
   brandForm!: FormGroup;
   partnerForm!: FormGroup;
   directForm!: FormGroup;
-  
+
   captchaNum1 = signal(0);
   captchaNum2 = signal(0);
   submissionStatus = signal<'idle' | 'generating' | 'success' | 'error' | 'invalidCaptcha'>('idle');
   aiResponse = signal<string | null>(null);
 
-  // Form options
   productCategories = ['Technical/Performance Wear', 'Knitwear (T-shirts, Fleece)', 'Woven (Shirts, Trousers)', 'Denim & Washed Goods', 'Kids Wear', 'Other'];
   annualVolumes = ['Under 100k units', '100k - 500k units', '500k - 1M units', 'Over 1M units'];
   partnershipTypes = ['Manufacturing Partner', 'Sourcing Alliance Partner'];
@@ -41,11 +37,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.fb = inject(FormBuilder);
-    if (process.env.API_KEY) {
-      this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-    } else {
-      console.error("Gemini API Key not found. Please ensure the API_KEY environment variable is set.");
-    }
   }
 
   ngOnInit(): void {
@@ -101,8 +92,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     this.activePathway.set(pathway);
     this.submissionStatus.set('idle');
     this.aiResponse.set(null);
-    if(pathway) {
-       this.generateCaptcha();
+    if (pathway) {
+      this.generateCaptcha();
     }
   }
 
@@ -111,7 +102,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     if (pathway === 'brands') return this.brandForm;
     if (pathway === 'partners') return this.partnerForm;
     if (pathway === 'direct') return this.directForm;
-    return new FormGroup({}); // Should not happen
+    return new FormGroup({});
   }
 
   generateCaptcha(): void {
@@ -128,7 +119,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.submissionStatus.set('error');
       return;
     }
-    
+
     const captchaAnswer = form.get('captcha')?.value;
     const correctAnswer = this.captchaNum1() + this.captchaNum2();
 
@@ -140,38 +131,37 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     this.submissionStatus.set('generating');
-    
-    if (!this.ai) {
-        this.submissionStatus.set('error');
-        this.aiResponse.set('The inquiry system is currently unavailable. Please try again later.');
-        return;
-    }
 
     const now = new Date();
     const month = (now.getMonth() + 1).toString().padStart(2, '0');
     const day = now.getDate().toString().padStart(2, '0');
     const randomDigits = Math.floor(1000 + Math.random() * 9000);
     const referenceNumber = `IAEX-${month}${day}-${randomDigits}`;
-
     const prompt = this.buildAIPrompt(form.value, referenceNumber);
 
     try {
-      const response = await this.ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
+      const response = await fetch('/api.php?action=ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
       });
 
-      let formattedResponse = response.text;
-      formattedResponse = formattedResponse.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      formattedResponse = formattedResponse.replace(/\n/g, '<br>');
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      const output = (payload.output || 'Request received. Our team will get back to you shortly.') as string;
+      const formattedResponse = output
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
 
       this.aiResponse.set(formattedResponse);
       this.submissionStatus.set('success');
-      
     } catch (e) {
-      console.error('Error generating AI response:', e);
+      console.error('Error generating response:', e);
       this.submissionStatus.set('error');
-      this.aiResponse.set('There was an issue processing your request. Our team has been notified. Please try again later.');
+      this.aiResponse.set('There was an issue processing your request. Please try again later.');
     }
   }
 
@@ -180,49 +170,41 @@ export class ContactComponent implements OnInit, OnDestroy {
     let inquiryDetails = '';
 
     if (pathway === 'brands') {
-        inquiryDetails = `
+      inquiryDetails = `
 - **Inquiry Type:** Brand Sourcing Program
 - **Product Category:** ${formData.productCategory}
 - **Annual Volume:** ${formData.annualVolume}
 - **Message:** ${formData.message}`;
     } else if (pathway === 'partners') {
-        inquiryDetails = `
+      inquiryDetails = `
 - **Inquiry Type:** Partnership Application
 - **Partnership Type:** ${formData.partnershipType}
 - **Core Specialization:** ${formData.specialization}
 - **Website:** ${formData.website || 'Not specified'}`;
-    } else { // direct
-        inquiryDetails = `
+    } else {
+      inquiryDetails = `
 - **Inquiry Type:** Direct Dialogue
 - **Purpose:** ${formData.purpose}
 - **Message:** ${formData.message}`;
     }
 
-    return `You are the AI assistant for IAEX Network, a sophisticated sourcing and supply chain partner. A user has submitted an inquiry.
+    return `You are the assistant for IAEX Network. A user has submitted an inquiry.
 
-    **User Details:**
-    - **Name:** ${formData.name}
-    - **Company:** ${formData.company || 'Not specified'}
-    - **Reference Number:** ${referenceNumber}
+**User Details:**
+- **Name:** ${formData.name}
+- **Company:** ${formData.company || 'Not specified'}
+- **Reference Number:** ${referenceNumber}
 
-    **Inquiry Specifics:**${inquiryDetails}
+**Inquiry Specifics:**${inquiryDetails}
 
-    Your task is to generate a confirmation message for the user.
-    1. Acknowledge receipt with an appropriate title like **"Sourcing Program Inquiry Received"** or **"Partnership Application Logged"**.
-    2. Thank them by name.
-    3. Confirm their inquiry has been logged with the provided reference number.
-    4. State that the relevant team (e.g., "our Program Strategy team," "our Network Development team") will review their submission and respond to their provided email address within one business day.
-    5. Keep the tone authoritative, professional, and efficient.
-    6. Structure the response clearly. Use markdown for formatting like bolding. Do not use markdown headings.
-    
-    Generate only the response text to be shown to the user.`;
+Generate a concise professional acknowledgement confirming receipt and expected response within one business day.`;
   }
 
   isInvalid(controlName: string): boolean {
     const control = this.getCurrentForm().get(controlName);
     return !!control && control.invalid && control.touched;
   }
-  
+
   getErrorMessage(controlName: string): string {
     const control = this.getCurrentForm().get(controlName);
     if (control?.hasError('required')) return 'This field is required.';
