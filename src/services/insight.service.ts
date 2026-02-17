@@ -570,13 +570,68 @@ export class InsightService {
     }
   ];
 
-  // FIX: Added public method to retrieve all articles.
   getArticles(): Article[] {
     return this.articles;
   }
 
-  // FIX: Added public method to retrieve a single article by its slug.
   getArticleBySlug(slug: string): Article | undefined {
     return this.articles.find(article => article.slug === slug);
   }
+
+  async fetchArticlesFromCms(): Promise<Article[]> {
+    try {
+      const response = await fetch('./api.php?action=public_posts&limit=100');
+      if (!response.ok) {
+        return this.articles;
+      }
+
+      const payload = await response.json();
+      const rows = Array.isArray(payload.data) ? payload.data : [];
+      if (!rows.length) {
+        return this.articles;
+      }
+
+      return rows.map((row: any): Article => ({
+        slug: row.slug,
+        title: row.title,
+        date: row.published_at || '',
+        category: 'Insight',
+        excerpt: row.excerpt || '',
+        author: 'IAEX Editorial',
+        imageUrl: row.featured_image || 'https://picsum.photos/seed/iaex-cms/600/400',
+        content: row.body || ''
+      }));
+    } catch {
+      return this.articles;
+    }
+  }
+
+  async fetchArticleBySlugFromCms(slug: string): Promise<Article | undefined> {
+    try {
+      const response = await fetch('./api.php?action=public_post&slug=' + encodeURIComponent(slug));
+      if (!response.ok) {
+        return this.getArticleBySlug(slug);
+      }
+
+      const payload = await response.json();
+      const row = payload.data;
+      if (!row) {
+        return this.getArticleBySlug(slug);
+      }
+
+      return {
+        slug: row.slug,
+        title: row.title,
+        date: row.published_at || '',
+        category: 'Insight',
+        excerpt: row.excerpt || '',
+        author: 'IAEX Editorial',
+        imageUrl: row.featured_image || 'https://picsum.photos/seed/iaex-cms-detail/600/400',
+        content: row.body || ''
+      };
+    } catch {
+      return this.getArticleBySlug(slug);
+    }
+  }
 }
+

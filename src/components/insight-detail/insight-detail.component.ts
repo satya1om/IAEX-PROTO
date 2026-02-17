@@ -41,6 +41,11 @@ export class InsightDetailComponent implements OnInit, OnDestroy {
       if (slug) {
         const foundArticle = this.insightService.getArticleBySlug(slug);
         this.article.set(foundArticle);
+        this.insightService.fetchArticleBySlugFromCms(slug).then((cmsArticle) => {
+          if (cmsArticle) {
+            this.article.set(cmsArticle);
+          }
+        });
       }
 
       const page = queryParams.get('page');
