@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/../backend/ApiRouter.php';
 
 $limiter = new RateLimiter();
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
@@ -453,6 +454,118 @@ if ($action === 'settings_get') {
     cmsRequireRole(['admin', 'editor']);
     $stmt = db()->query('SELECT `key`, `value` FROM cms_settings ORDER BY `key` ASC');
     App::json(['data' => $stmt->fetchAll()]);
+}
+
+
+if ($action === 'crm_leads_list') {
+    cmsRequireRole(['admin', 'editor']);
+    $status = Security::sanitizeString($_GET['status'] ?? '');
+    $query = 'SELECT id, reference_number, pathway, name, email, company, status, assigned_to, created_at FROM leads';
+    $params = [];
+    if ($status !== '') {
+        $query .= ' WHERE status = :status';
+        $params['status'] = $status;
+    }
+    $query .= ' ORDER BY created_at DESC';
+    $stmt = db()->prepare($query);
+    $stmt->execute($params);
+    App::json(['data' => $stmt->fetchAll()]);
+}
+
+if ($action === 'crm_lead_get') {
+    cmsRequireRole(['admin', 'editor']);
+    $id = (int) ($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        App::json(['error' => 'Invalid id'], 422);
+    }
+
+    $leadStmt = db()->prepare('SELECT * FROM leads WHERE id = :id LIMIT 1');
+    $leadStmt->execute(['id' => $id]);
+    $lead = $leadStmt->fetch();
+    if (!$lead) {
+        App::json(['data' => null]);
+    }
+
+    $notesStmt = db()->prepare('SELECT ln.id, ln.note, ln.created_at, u.email AS created_by FROM lead_notes ln LEFT JOIN users u ON u.id = ln.user_id WHERE ln.lead_id = :lead_id ORDER BY ln.created_at DESC');
+    $notesStmt->execute(['lead_id' => $id]);
+
+    $activityStmt = db()->prepare('SELECT id, activity_type, activity_data, created_at FROM lead_activities WHERE lead_id = :lead_id ORDER BY created_at DESC');
+    $activityStmt->execute(['lead_id' => $id]);
+
+    App::json(['data' => $lead, 'notes' => $notesStmt->fetchAll(), 'activities' => $activityStmt->fetchAll()]);
+}
+
+if ($action === 'crm_lead_update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    cmsRequireRole(['admin', 'editor']);
+    $input = App::input();
+    cmsRequireCsrf($input);
+
+    $id = (int) ($input['id'] ?? 0);
+    $status = Security::sanitizeString($input['status'] ?? 'new');
+    $assignedTo = isset($input['assigned_to']) ? (int) $input['assigned_to'] : null;
+
+    if ($id <= 0) {
+        App::json(['error' => 'Invalid id'], 422);
+    }
+
+    $stmt = db()->prepare('UPDATE leads SET status = :status, assigned_to = :assigned_to WHERE id = :id');
+    $stmt->execute(['status' => $status, 'assigned_to' => $assignedTo, 'id' => $id]);
+
+    $activityStmt = db()->prepare('INSERT INTO lead_activities (lead_id, activity_type, activity_data, user_id) VALUES (:lead_id,:activity_type,:activity_data,:user_id)');
+    $activityStmt->execute([
+        'lead_id' => $id,
+        'activity_type' => 'status_updated',
+        'activity_data' => json_encode(['status' => $status, 'assigned_to' => $assignedTo]),
+        'user_id' => (int) ($_SESSION['user_id'] ?? 0),
+    ]);
+
+    App::json(['success' => true]);
+}
+
+if ($action === 'crm_note_add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    cmsRequireRole(['admin', 'editor']);
+    $input = App::input();
+    cmsRequireCsrf($input);
+
+    $leadId = (int) ($input['lead_id'] ?? 0);
+    $note = Security::sanitizeString($input['note'] ?? '');
+    if ($leadId <= 0 || $note === '') {
+        App::json(['error' => 'Invalid input'], 422);
+    }
+
+    $noteStmt = db()->prepare('INSERT INTO lead_notes (lead_id, user_id, note) VALUES (:lead_id,:user_id,:note)');
+    $noteStmt->execute([
+        'lead_id' => $leadId,
+        'user_id' => (int) ($_SESSION['user_id'] ?? 0),
+        'note' => $note,
+    ]);
+
+    $activityStmt = db()->prepare('INSERT INTO lead_activities (lead_id, activity_type, activity_data, user_id) VALUES (:lead_id,:activity_type,:activity_data,:user_id)');
+    $activityStmt->execute([
+        'lead_id' => $leadId,
+        'activity_type' => 'note_added',
+        'activity_data' => json_encode(['note' => $note]),
+        'user_id' => (int) ($_SESSION['user_id'] ?? 0),
+    ]);
+
+    App::json(['success' => true]);
+}
+
+if ($action === 'crm_export_csv') {
+    cmsRequireRole(['admin', 'editor']);
+    $stmt = db()->query('SELECT reference_number, pathway, name, email, company, status, created_at FROM leads ORDER BY created_at DESC');
+    $rows = $stmt->fetchAll();
+
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="leads.csv"');
+
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['reference_number', 'pathway', 'name', 'email', 'company', 'status', 'created_at']);
+    foreach ($rows as $row) {
+        fputcsv($out, [$row['reference_number'], $row['pathway'], $row['name'], $row['email'], $row['company'], $row['status'], $row['created_at']]);
+    }
+    fclose($out);
+    exit;
 }
 
 if ($action === 'settings_update' && $_SERVER['REQUEST_METHOD'] === 'POST') {
