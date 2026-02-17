@@ -1,0 +1,53 @@
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Preserve direct API requests.
+RewriteRule ^api\.php$ public_html/api.php [L,QSA]
+
+# Serve static files from /public_html if they exist there.
+RewriteCond %{REQUEST_URI} !^/admin/
+RewriteCond %{REQUEST_URI} !^/core/
+RewriteCond %{REQUEST_URI} !^/services/
+RewriteCond %{REQUEST_URI} !^/config/
+RewriteCond %{REQUEST_URI} !^/storage/
+RewriteCond %{REQUEST_URI} !^/logs/
+RewriteCond %{DOCUMENT_ROOT}/public_html/$1 -f
+RewriteRule ^(.+)$ public_html/$1 [L]
+
+# Route all SPA paths to Angular entrypoint.
+RewriteCond %{REQUEST_URI} !^/admin/
+RewriteCond %{REQUEST_URI} !^/core/
+RewriteCond %{REQUEST_URI} !^/services/
+RewriteCond %{REQUEST_URI} !^/config/
+RewriteCond %{REQUEST_URI} !^/storage/
+RewriteCond %{REQUEST_URI} !^/logs/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ public_html/index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css application/javascript application/json
+</IfModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/css "access plus 30 days"
+ExpiresByType application/javascript "access plus 30 days"
+ExpiresByType image/png "access plus 30 days"
+ExpiresByType image/jpeg "access plus 30 days"
+</IfModule>
+
+<FilesMatch "(\.env|composer\.(json|lock)|database\.sql|env\.php|database\.php|bootstrap\.php)$">
+Require all denied
+</FilesMatch>

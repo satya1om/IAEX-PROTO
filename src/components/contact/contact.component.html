@@ -128,7 +128,7 @@
                     }
                   </button>
                   @if (submissionStatus() === 'invalidCaptcha') { <p class="text-xs text-red-500 text-center">Incorrect security answer. Please try again.</p> }
-                  @if (submissionStatus() === 'error' && !submissionStatus.set('invalidCaptcha')) { <p class="text-xs text-red-500 text-center">Please fill out all required fields marked with *.</p> }
+                  @if (submissionStatus() === 'error') { <p class="text-xs text-red-500 text-center">Please fill out all required fields marked with *.</p> }
                    <div class="text-center pt-2">
                       <button type="button" (click)="setPathway(null)" class="text-sm text-gray-400 hover:text-white">&larr; Return to Pathways</button>
                     </div>
@@ -140,9 +140,9 @@
                 <div class="w-16 h-16 flex items-center justify-center bg-green-500/20 rounded-full mx-auto mb-6 border border-green-500/30">
                   <i class="fa-solid fa-check-double text-green-400 text-2xl"></i>
                 </div>
-                <div class="prose prose-invert max-w-none prose-p:font-light prose-p:leading-relaxed prose-strong:font-semibold" [innerHTML]="aiResponse()"></div>
-                @if (submissionStatus() === 'error' && aiResponse()) {
-                   <p class="text-sm text-red-500 mt-4">{{ aiResponse() }}</p>
+                <div class="prose prose-invert max-w-none prose-p:font-light prose-p:leading-relaxed prose-strong:font-semibold" [innerHTML]="responseMessage()"></div>
+                @if (submissionStatus() === 'error' && responseMessage()) {
+                   <p class="text-sm text-red-500 mt-4">{{ responseMessage() }}</p>
                 }
                 <button (click)="resetForm()" class="mt-8 text-sm font-medium text-gray-300 hover:text-white transition-colors">Submit Another Inquiry</button>
               </div>
