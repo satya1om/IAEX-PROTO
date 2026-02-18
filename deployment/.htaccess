@@ -8,6 +8,7 @@ RewriteEngine On
 RewriteRule ^api\.php$ public_html/api.php [L,QSA]
 
 # Serve static files from /public_html if they exist there.
+# Serve static/app files from /public_html when requested from root.
 RewriteCond %{REQUEST_URI} !^/admin/
 RewriteCond %{REQUEST_URI} !^/core/
 RewriteCond %{REQUEST_URI} !^/services/
@@ -18,6 +19,7 @@ RewriteCond %{DOCUMENT_ROOT}/public_html/$1 -f
 RewriteRule ^(.+)$ public_html/$1 [L]
 
 # Route all SPA paths to Angular entrypoint.
+# Route root and SPA paths to the frontend entrypoint.
 RewriteCond %{REQUEST_URI} !^/admin/
 RewriteCond %{REQUEST_URI} !^/core/
 RewriteCond %{REQUEST_URI} !^/services/
@@ -49,5 +51,6 @@ ExpiresByType image/jpeg "access plus 30 days"
 </IfModule>
 
 <FilesMatch "(\.env|composer\.(json|lock)|database\.sql|env\.php|database\.php|bootstrap\.php)$">
+<FilesMatch "(\.env|composer\.(json|lock)|database\.sql)$">
 Require all denied
 </FilesMatch>

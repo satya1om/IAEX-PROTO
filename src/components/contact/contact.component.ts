@@ -93,7 +93,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   setPathway(pathway: 'brands' | 'partners' | 'direct' | null): void {
     this.activePathway.set(pathway);
     this.submissionStatus.set('idle');
-    this.responseMessage.set(null);
+    this.aiResponse.set(null);
     if (pathway) {
       this.generateCaptcha();
     }
@@ -137,6 +137,7 @@ export class ContactComponent implements OnInit, OnDestroy {
       this.submissionStatus.set('error');
       return;
     }
+    this.submissionStatus.set('generating');
 
     this.submissionStatus.set('generating');
 
@@ -157,6 +158,22 @@ export class ContactComponent implements OnInit, OnDestroy {
       }
 
       const formatted = (response.message || 'Your request has been received.')
+    const prompt = this.buildAIPrompt(form.value, referenceNumber);
+
+    try {
+      const response = await fetch('/api.php?action=ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const payload = await response.json();
+      const output = (payload.output || 'Request received. Our team will get back to you shortly.') as string;
+      const formattedResponse = output
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\n/g, '<br>');
 
@@ -165,6 +182,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     } catch {
       this.submissionStatus.set('error');
       this.responseMessage.set('There was an issue processing your request. Please try again later.');
+    } catch (e) {
+      console.error('Error generating response:', e);
+      this.submissionStatus.set('error');
+      this.aiResponse.set('There was an issue processing your request. Please try again later.');
     }
   }
 
@@ -211,6 +232,34 @@ export class ContactComponent implements OnInit, OnDestroy {
         purpose: formData.purpose,
       },
     };
+      inquiryDetails = `
+- **Inquiry Type:** Brand Sourcing Program
+- **Product Category:** ${formData.productCategory}
+- **Annual Volume:** ${formData.annualVolume}
+- **Message:** ${formData.message}`;
+    } else if (pathway === 'partners') {
+      inquiryDetails = `
+- **Inquiry Type:** Partnership Application
+- **Partnership Type:** ${formData.partnershipType}
+- **Core Specialization:** ${formData.specialization}
+- **Website:** ${formData.website || 'Not specified'}`;
+    } else {
+      inquiryDetails = `
+- **Inquiry Type:** Direct Dialogue
+- **Purpose:** ${formData.purpose}
+- **Message:** ${formData.message}`;
+    }
+
+    return `You are the assistant for IAEX Network. A user has submitted an inquiry.
+
+**User Details:**
+- **Name:** ${formData.name}
+- **Company:** ${formData.company || 'Not specified'}
+- **Reference Number:** ${referenceNumber}
+
+**Inquiry Specifics:**${inquiryDetails}
+
+Generate a concise professional acknowledgement confirming receipt and expected response within one business day.`;
   }
 
   isInvalid(controlName: string): boolean {

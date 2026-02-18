@@ -7,14 +7,8 @@ final class Security
     public function enforceHttps(): void
     {
         $https = $_SERVER['HTTPS'] ?? 'off';
-        $forwardedProto = $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '';
-        $forwardedSsl = $_SERVER['HTTP_X_FORWARDED_SSL'] ?? '';
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        $isLocalHost = in_array($host, ['localhost', '127.0.0.1'], true) || str_starts_with($host, '127.0.0.1:') || str_starts_with($host, 'localhost:');
-
-        $isHttps = $https === 'on' || strtolower($forwardedProto) === 'https' || strtolower($forwardedSsl) === 'on';
-
-        if (!$isHttps && php_sapi_name() !== 'cli' && !$isLocalHost) {
+        if ($https !== 'on' && php_sapi_name() !== 'cli') {
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
             $uri = $_SERVER['REQUEST_URI'] ?? '/';
             header('Location: https://' . $host . $uri, true, 301);
             exit;

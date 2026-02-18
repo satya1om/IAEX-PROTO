@@ -95,5 +95,18 @@ final class SMTPService
             Logger::error('SMTP unexpected response', ['expected' => $expectedCodes, 'actual' => $code, 'response' => trim($response)]);
             throw new RuntimeException('SMTP command failed');
         }
+        $headers = [
+            'MIME-Version: 1.0',
+            'Content-type: text/html; charset=utf-8',
+            'From: ' . env('SMTP_FROM', 'no-reply@example.com'),
+        ];
+
+        $sent = mail($to, $subject, $html, implode("\r\n", $headers));
+
+        if (!$sent) {
+            Logger::error('Mail send failed', ['to' => $to, 'subject' => $subject]);
+        }
+
+        return $sent;
     }
 }

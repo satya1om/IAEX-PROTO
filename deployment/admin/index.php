@@ -29,6 +29,7 @@ Auth::requireRole('admin');
     <li><a href="seo.php">SEO</a></li>
     <li><a href="cms-settings.php">CMS Settings</a></li>
     <li><a href="settings.php">System Settings</a></li>
+    <li><a href="settings.php">Settings</a></li>
     <li><a href="logout.php">Logout</a></li>
   </ul>
 </body>

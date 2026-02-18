@@ -175,6 +175,33 @@ Allow: /
 Sitemap: /public_html/api.php?action=sitemap
 ";
     exit;
+if ($action === 'ai') {
+    $input = App::input();
+    $prompt = Security::sanitizeString($input['prompt'] ?? '');
+
+    $manager = new AIProviderManager([
+        new NullAIProvider(),
+    ]);
+
+    App::json($manager->generate($prompt));
+}
+
+if ($action === 'contact' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = App::input();
+    if (!Csrf::validate($input['csrf_token'] ?? null)) {
+        App::json(['error' => 'Invalid CSRF token'], 422);
+    }
+
+    $email = filter_var($input['email'] ?? '', FILTER_VALIDATE_EMAIL);
+    $message = Security::sanitizeString($input['message'] ?? '');
+
+    if (!$email || $message === '') {
+        App::json(['error' => 'Invalid input'], 422);
+    }
+
+    $smtp = new SMTPService();
+    $smtp->send((string) env('ADMIN_EMAIL', 'admin@example.com'), 'New Contact Request', nl2br($message));
+    App::json(['success' => true]);
 }
 
 if ($action === 'csrf') {
