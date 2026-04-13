@@ -1,0 +1,51 @@
+:root {
+  --bg: #020304;
+  --fg: #e8edf2;
+  --muted: #9aa3ad;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#field {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 5vh 8vw;
+}
+
+#line {
+  margin: 0;
+  max-width: 980px;
+  text-align: center;
+  letter-spacing: 0.015em;
+  line-height: 1.45;
+  font-size: clamp(12px, 1.2vw, 18px);
+  color: var(--muted);
+  text-shadow: 0 0 16px rgba(232, 237, 242, 0.05);
+  transition: opacity 500ms ease, filter 500ms ease;
+  filter: blur(0.1px);
+}
