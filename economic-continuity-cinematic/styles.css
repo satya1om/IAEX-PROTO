@@ -1,0 +1,47 @@
+:root {
+  --bg: #020304;
+  --fg: #e9eef5;
+  --muted: #9aa4b0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+
+#sim {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 5vh 8vw;
+}
+
+#caption {
+  color: var(--muted);
+  text-align: center;
+  max-width: 920px;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  font-size: clamp(12px, 1.1vw, 18px);
+  text-shadow: 0 0 18px rgba(233, 238, 245, 0.07);
+  transition: opacity 380ms ease;
+}
