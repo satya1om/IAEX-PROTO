@@ -1,0 +1,9 @@
+[
+  { "id": "hero", "start": 0.0, "end": 0.14 },
+  { "id": "fracture", "start": 0.14, "end": 0.28 },
+  { "id": "mesh", "start": 0.28, "end": 0.42 },
+  { "id": "chain", "start": 0.42, "end": 0.56 },
+  { "id": "gravity", "start": 0.56, "end": 0.7 },
+  { "id": "corridor", "start": 0.7, "end": 0.84 },
+  { "id": "civilization", "start": 0.84, "end": 1.0 }
+]
