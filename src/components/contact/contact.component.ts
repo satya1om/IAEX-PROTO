@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ApiService, ContactPayload } from '../../app/services/api.service';
 
 @Component({
   selector: 'app-contact',
@@ -13,6 +14,7 @@ import { Subscription } from 'rxjs';
 export class ContactComponent implements OnInit, OnDestroy {
   private readonly fb: FormBuilder;
   private readonly route = inject(ActivatedRoute);
+  private readonly apiService = inject(ApiService);
   private routeSub!: Subscription;
 
   activePathway = signal<'brands' | 'partners' | 'direct' | null>(null);
@@ -24,7 +26,7 @@ export class ContactComponent implements OnInit, OnDestroy {
   captchaNum1 = signal(0);
   captchaNum2 = signal(0);
   submissionStatus = signal<'idle' | 'generating' | 'success' | 'error' | 'invalidCaptcha'>('idle');
-  aiResponse = signal<string | null>(null);
+  responseMessage = signal<string | null>(null);
 
   productCategories = ['Technical/Performance Wear', 'Knitwear (T-shirts, Fleece)', 'Woven (Shirts, Trousers)', 'Denim & Washed Goods', 'Kids Wear', 'Other'];
   annualVolumes = ['Under 100k units', '100k - 500k units', '500k - 1M units', 'Over 1M units'];
@@ -130,6 +132,13 @@ export class ContactComponent implements OnInit, OnDestroy {
       return;
     }
 
+    const pathway = this.activePathway();
+    if (!pathway) {
+      this.submissionStatus.set('error');
+      return;
+    }
+    this.submissionStatus.set('generating');
+
     this.submissionStatus.set('generating');
 
     const now = new Date();
@@ -137,6 +146,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     const day = now.getDate().toString().padStart(2, '0');
     const randomDigits = Math.floor(1000 + Math.random() * 9000);
     const referenceNumber = `IAEX-${month}${day}-${randomDigits}`;
+
+    const payload = this.buildContactPayload(pathway, form.value, referenceNumber);
+
+    try {
+      const csrfToken = await this.apiService.getCsrfToken();
+      const response = await this.apiService.submitContact(payload, csrfToken);
+
+      if (!response.success) {
+        throw new Error('Submission failed');
+      }
+
+      const formatted = (response.message || 'Your request has been received.')
     const prompt = this.buildAIPrompt(form.value, referenceNumber);
 
     try {
@@ -156,8 +177,11 @@ export class ContactComponent implements OnInit, OnDestroy {
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\n/g, '<br>');
 
-      this.aiResponse.set(formattedResponse);
+      this.responseMessage.set(formatted);
       this.submissionStatus.set('success');
+    } catch {
+      this.submissionStatus.set('error');
+      this.responseMessage.set('There was an issue processing your request. Please try again later.');
     } catch (e) {
       console.error('Error generating response:', e);
       this.submissionStatus.set('error');
@@ -165,11 +189,49 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
   }
 
-  buildAIPrompt(formData: any, referenceNumber: string): string {
-    const pathway = this.activePathway();
-    let inquiryDetails = '';
-
+  private buildContactPayload(pathway: 'brands' | 'partners' | 'direct', formData: any, referenceNumber: string): ContactPayload {
     if (pathway === 'brands') {
+      return {
+        pathway,
+        referenceNumber,
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        message: formData.message,
+        details: {
+          productCategory: formData.productCategory,
+          annualVolume: formData.annualVolume,
+        },
+      };
+    }
+
+    if (pathway === 'partners') {
+      return {
+        pathway,
+        referenceNumber,
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        message: formData.specialization,
+        details: {
+          partnershipType: formData.partnershipType,
+          specialization: formData.specialization,
+          website: formData.website || '',
+        },
+      };
+    }
+
+    return {
+      pathway,
+      referenceNumber,
+      name: formData.name,
+      email: formData.email,
+      company: formData.company,
+      message: formData.message,
+      details: {
+        purpose: formData.purpose,
+      },
+    };
       inquiryDetails = `
 - **Inquiry Type:** Brand Sourcing Program
 - **Product Category:** ${formData.productCategory}
@@ -215,7 +277,7 @@ Generate a concise professional acknowledgement confirming receipt and expected 
   resetForm(): void {
     this.activePathway.set(null);
     this.submissionStatus.set('idle');
-    this.aiResponse.set(null);
+    this.responseMessage.set(null);
     this.brandForm.reset();
     this.partnerForm.reset();
     this.directForm.reset();

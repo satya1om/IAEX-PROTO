@@ -22,6 +22,13 @@ Auth::requireRole('admin');
   <h1>Admin Dashboard</h1>
   <p>System log file: <code>/logs/system.log</code></p>
   <ul>
+    <li><a href="pages.php">Pages</a></li>
+    <li><a href="posts.php">Posts</a></li>
+    <li><a href="media.php">Media</a></li>
+    <li><a href="crm.php">CRM</a></li>
+    <li><a href="seo.php">SEO</a></li>
+    <li><a href="cms-settings.php">CMS Settings</a></li>
+    <li><a href="settings.php">System Settings</a></li>
     <li><a href="settings.php">Settings</a></li>
     <li><a href="logout.php">Logout</a></li>
   </ul>

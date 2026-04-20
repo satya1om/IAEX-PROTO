@@ -13,9 +13,10 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": {
-              "base": "./dist",
+              "base": "deployment/public_html",
               "browser": "."
             },
+            "deleteOutputPath": false,
             "browser": "index.tsx",
             "tsConfig": "tsconfig.json"
           },

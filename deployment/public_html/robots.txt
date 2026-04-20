@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+Sitemap: /public_html/api.php?action=sitemap
 Sitemap: /sitemap.xml

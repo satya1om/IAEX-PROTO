@@ -10,9 +10,6 @@ require_once __DIR__ . '/../core/RateLimiter.php';
 require_once __DIR__ . '/../core/Logger.php';
 require_once __DIR__ . '/../core/Auth.php';
 require_once __DIR__ . '/../core/App.php';
-require_once __DIR__ . '/../services/AIProviderInterface.php';
-require_once __DIR__ . '/../services/NullAIProvider.php';
-require_once __DIR__ . '/../services/AIProviderManager.php';
 require_once __DIR__ . '/../services/SMTPService.php';
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));

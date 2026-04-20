@@ -40,6 +40,10 @@ export class InsightsComponent implements OnInit, OnDestroy {
       const page = Number(params.get('page'));
       this.currentPage.set(page > 0 ? page : 1);
     });
+
+    this.insightService.fetchArticlesFromCms().then((articles) => {
+      this.allArticles.set(articles);
+    });
   }
 
   ngOnDestroy(): void {

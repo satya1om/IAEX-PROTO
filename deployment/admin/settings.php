@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <h1>Settings</h1>
 <form method="post">
 <input type="hidden" name="csrf_token" value="<?= Csrf::token() ?>">
+<label>SMTP Host<input name="smtp_host" value="<?= Security::sanitizeString(env('SMTP_HOST', '')) ?>"></label><br>
+<label>SMTP Port<input name="smtp_port" value="<?= Security::sanitizeString(env('SMTP_PORT', '587')) ?>"></label><br>
+<label>SMTP User<input name="smtp_user" value="<?= Security::sanitizeString(env('SMTP_USER', '')) ?>"></label><br>
 <label>AI Provider Priority<input name="ai_provider_priority" value="<?= Security::sanitizeString(env('AI_PROVIDER_PRIORITY', 'null')) ?>"></label><br>
 <label>SMTP Host<input name="smtp_host" value="<?= Security::sanitizeString(env('SMTP_HOST', '')) ?>"></label><br>
 <button type="submit">Save</button>
